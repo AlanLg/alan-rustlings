@@ -14,33 +14,23 @@
 
 // Execute `rustlings hint quiz3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+use std::fmt::{Display, Formatter, Pointer};
 
-pub struct ReportCard {
-    pub grade: dyn Grade,
+pub struct ReportCard<T> {
+    pub grade: T,
     pub student_name: String,
     pub student_age: u8,
 }
 
-impl ReportCard {
+impl<T: Display> ReportCard<T> {
     pub fn print(&self) -> String {
-        format!("{} ({}) - achieved a grade of {}",
-            &self.student_name, &self.student_age, &self.grade.get_grade())
+        format!("{}", &self)
     }
 }
 
-trait Grade {
-    fn get_grade(&self) -> String;
-}
-
-impl Grade for &str {
-    fn get_grade(&self) -> String {
-        &self
-    }
-}
-impl Grade for f32 {
-    fn get_grade(&self) -> String {
-        String::from(&self)
+impl<T: Display> Display for ReportCard<T> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} ({}) - achieved a grade of {}", &self.student_name, &self.student_age, &self.grade)
     }
 }
 
